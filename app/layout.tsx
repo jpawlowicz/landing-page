@@ -1,6 +1,12 @@
 import type { Metadata } from 'next'
-import { Space_Mono, Syne } from 'next/font/google'
+import { Space_Mono, Syne, Space_Grotesk } from 'next/font/google'
 import './globals.css'
+
+const spaceGrotesk = Space_Grotesk({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+})
 
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
@@ -26,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${spaceMono.variable} ${syne.variable}`}>
+    <html lang="en" className={`${spaceMono.variable} ${syne.variable} ${spaceGrotesk.variable}`}>
       <body className="bg-paper">{children}</body>
     </html>
   )

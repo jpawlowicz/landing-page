@@ -1,154 +1,109 @@
-import Link from 'next/link'
-import VisitorCount from './VisitorCount'
+import MentorshipCard from './components/MentorshipCard'
+import FindMeCard from './components/FindMeCard'
 
-const corners = [
-  { label: 'Work',     sub: '4 case studies',        href: '#work',      pos: 'top-0 left-0 items-start' },
-  { label: 'About',    sub: 'Warsaw / Remote',        href: '/about',     pos: 'top-0 right-0 items-end'  },
-  { label: 'Services', sub: 'Research · Design · AI', href: '#services',  pos: 'bottom-0 left-0 items-start' },
-  { label: 'Contact',  sub: "Let's work together",    href: '/contact',   pos: 'bottom-0 right-0 items-end'  },
-]
+const CIRCLE_TEXT = 'available · UX Design · AI Products · available · UX Design · AI Products · '
 
-const links = [
-  { label: 'Instagram', href: 'https://instagram.com' },
-  { label: 'LinkedIn',  href: 'https://linkedin.com'  },
-  { label: 'Read.cv',   href: 'https://read.cv'       },
-  { label: 'Resume ↓',  href: '#'                     },
-]
-
+function RotatingBadge() {
+  const radius = 52
+  return (
+    <div style={{ position: 'fixed', bottom: '1.5rem', right: '1.75rem', pointerEvents: 'none', zIndex: 10 }}>
+      <div style={{ position: 'relative', width: 148, height: 148 }}>
+        <svg viewBox="0 0 148 148" width="148" height="148" className="bento-spin">
+          <defs>
+            <path id="circlePath" d={`M 74,74 m -${radius},0 a ${radius},${radius} 0 1,1 ${radius * 2},0 a ${radius},${radius} 0 1,1 -${radius * 2},0`} />
+          </defs>
+          <text fill="#1a1a1a" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="8.8" fontWeight="500" letterSpacing="2.2">
+            <textPath href="#circlePath" startOffset="0%">{CIRCLE_TEXT}</textPath>
+          </text>
+        </svg>
+        <div style={{ position: 'absolute', width: 10, height: 10, borderRadius: '50%', background: '#22c55e', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-paper flex items-center justify-center overflow-hidden font-mono">
+    <div className="bento-wrap">
+      <div className="bento-grid">
 
-      {/* Corner navigation */}
-      {corners.map(({ label, sub, href, pos }) => (
-        <Link
-          key={label}
-          href={href}
-          className={`absolute p-4 flex flex-col gap-1 cursor-pointer group no-underline ${pos}`}
-        >
-          <span className="text-[10px] font-bold tracking-[0.05em] text-ink flex items-center gap-[5px]">
-            {label} {' '}
-            <span className="text-[14px] leading-none inline-block transition-transform duration-200 ease-out group-hover:translate-x-[3px] group-hover:-translate-y-[3px]">
-              ↗
-            </span>
-          </span>
-          <span className="text-[8.5px] text-ink opacity-30">{sub}</span>
-        </Link>
-      ))}
-
-      <div className="flex flex-col items-center">
-
-        {/* Card + spinning badge */}
-        <div className="relative">
-
-          <div className="border-2 border-ink w-[452px] bg-paper flex flex-col">
-
-            <div className="flex">
-
-              {/* Left panel — name & title */}
-              <div className="w-[154px] shrink-0 border-r-2 border-ink px-[18px] py-[22px] flex flex-col justify-between">
-                <div>
-                  <h1 className="font-syne text-[22px] font-bold text-ink tracking-[-0.04em] leading-[1.05]">
-                    Joanna<br />Wrobel
-                  </h1>
-                  <p className="text-[8px] text-ink opacity-40 mt-[9px] leading-[1.75] tracking-[0.02em]">
-                    UX Design<br />& AI Products
-                  </p>
-                </div>
-                <p className="text-[7.5px] text-ink opacity-[0.22]">Warsaw · Remote</p>
-              </div>
-
-              {/* Right panel — info, about, links */}
-              <div className="flex-1 flex flex-col">
-
-                {/* Status */}
-                <div className="flex justify-between items-center px-[14px] py-[7px] border-b border-ink/10 text-[9px] text-ink gap-2">
-                  <span className="opacity-40 shrink-0">Status</span>
-                  <span className="flex items-center gap-[5px]">
-                    <span className="w-[5px] h-[5px] rounded-full bg-available shrink-0 inline-block" />
-                    Available for work
-                  </span>
-                </div>
-
-                {/* About */}
-                <div className="px-[14px] py-[9px] border-b border-ink/10 flex-1">
-                  <p className="text-[7.5px] text-ink opacity-[0.35] tracking-[0.06em] mb-[7px]">About</p>
-                  <p className="text-[9px] text-ink leading-[1.85]">
-                    UX design · Figma expert · AI design<br />
-                    Illustration · 3D · Interior design<br />
-                    Front-end · Animation · Systems<br />
-                    <span className="opacity-[0.45]">Mentor · Knowledge sharer · Versatile</span>
-                  </p>
-                </div>
-
-                {/* Now */}
-                <div className="flex justify-between items-start px-[14px] py-[7px] border-b border-ink/10 text-[9px] text-ink gap-2">
-                  <span className="opacity-40 shrink-0 pt-px">Now</span>
-                  <span className="text-right leading-[1.6]">
-                    AI-native interfaces<br />for humans
-                    <span className="animate-blink">_</span>
-                  </span>
-                </div>
-
-                {/* Links 2×2 grid */}
-                <div className="grid grid-cols-2 border-t border-ink/10">
-                  {links.map(({ label, href }, i) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target={href.startsWith('http') ? '_blank' : undefined}
-                      rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className={[
-                        'px-[11px] py-[7px] text-[9px] text-ink flex items-center gap-[5px]',
-                        'transition-opacity hover:opacity-40 no-underline',
-                        i % 2 === 0 ? 'border-r border-ink/10' : '',
-                        i < 2      ? 'border-b border-ink/10' : '',
-                      ].join(' ')}
-                    >
-                      <span className="opacity-[0.28]">→</span>
-                      {label}
-                    </a>
-                  ))}
-                </div>
-
-              </div>
-            </div>
-
-            {/* Card footer */}
-            <div className="px-4 py-[7px] border-t-2 border-ink flex justify-between text-[7.5px] text-ink opacity-25">
-              <span>Est. 2025</span>
-              <VisitorCount />
-            </div>
-
+        {/* HERO */}
+        <div className="b-card card-hero">
+          <div>
+            <div className="b-label">Hero</div>
+            <h1 style={{ fontSize: 'clamp(2rem,3.8vw,2.75rem)', fontWeight: 800, lineHeight: 1.0, color: '#1a1a1a', letterSpacing: '-0.035em', marginBottom: '0.9rem' }}>
+              Joanna<br />Wrobel
+            </h1>
+            <p style={{ fontSize: '0.74rem', color: '#555', lineHeight: 1.8 }}>
+              UX design · Figma expert · AI design<br />Illustration · 3D · Systems
+            </p>
           </div>
-
-          {/* Spinning circular badge */}
-          <div className="absolute -bottom-11 -right-11 pointer-events-none">
-            <div className="w-[88px] h-[88px] animate-spin-slow" style={{ transformOrigin: 'center center' }}>
-              <svg width="88" height="88" viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <path id="textCircle" d="M44,7 a37,37 0 1,1 -0.01,0" fill="none" />
-                </defs>
-                <text
-                  fontFamily="var(--font-space-mono), monospace"
-                  fontSize="7.2"
-                  fill="#0A0907"
-                  letterSpacing="1.8"
-                >
-                  <textPath href="#textCircle">
-                    ◆ Available ◆ UX Design ◆ AI Products ◆ Warsaw
-                  </textPath>
-                </text>
-                <circle cx="44" cy="44" r="3.5" fill="#3EC96B" />
-              </svg>
-            </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: '0.9rem' }}>
+            <span className="b-tag">Available for work</span>
+            <span className="b-tag">Warsaw / Remote</span>
           </div>
-
         </div>
-  
+
+        {/* FIND ME — Instagram with pink gradient */}
+        <FindMeCard />
+
+        {/* MENTORSHIP — dark card with canvas mesh */}
+        <MentorshipCard />
+
+        {/* RESUME */}
+        <div className="b-card card-resume">
+          <div>
+            <div className="b-label">Resume</div>
+            <h2 style={{ fontSize: '1rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '0.3rem' }}>Download CV</h2>
+            <p style={{ fontSize: '0.7rem', color: '#666', marginBottom: '0.8rem' }}>PDF · updated 2026</p>
+            <a href="#" className="b-btn">↓ Get it</a>
+          </div>
+        </div>
+
+        {/* LINKEDIN */}
+        <div className="b-card card-linkedin">
+          <div className="b-label">LinkedIn</div>
+          <div>
+            <h2 style={{ fontSize: '1rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '0.3rem' }}>{"Let's connect"}</h2>
+            <p style={{ fontSize: '0.7rem', color: '#666' }}>Full work history + recommendations</p>
+          </div>
+        </div>
+
+        {/* WORK */}
+        <div className="b-card card-work">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div className="b-label">Work · 4 Case Studies</div>
+            <span className="b-arrow">↗</span>
+          </div>
+          <div>
+            <h2 style={{ fontSize: '1rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '0.3rem' }}>Selected projects</h2>
+            <p style={{ fontSize: '0.7rem', color: '#555' }}>UX design, AI products, design systems — with process.</p>
+          </div>
+        </div>
+
+        {/* SOCIAL PROOF */}
+        <div className="b-card card-social">
+          <div className="b-label">Social proof</div>
+          <p className="b-quote" style={{ fontSize: '0.92rem', fontWeight: 700, color: '#1a1a1a', lineHeight: 1.45, fontStyle: 'italic', marginBottom: '0.4rem' }}>
+            &ldquo;She pinpointed exactly what was off in 20 minutes.&rdquo;
+          </p>
+          <p style={{ fontSize: '0.67rem', color: '#888' }}>— designer, 3 yrs exp</p>
+        </div>
+
+        {/* CONTACT */}
+        <div className="b-card card-contact">
+          <div className="b-label">Contact</div>
+          <div>
+            <p style={{ fontSize: '0.88rem', fontWeight: 800, color: '#1a1a1a', lineHeight: 1.3, marginBottom: '0.75rem' }}>
+              joannawrobel.ux@gmail.com
+            </p>
+            <a href="mailto:joannawrobel.ux@gmail.com" className="b-btn">Say hello →</a>
+          </div>
+        </div>
 
       </div>
-    </main>
+
+      <RotatingBadge />
+    </div>
   )
 }
