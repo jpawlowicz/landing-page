@@ -2,98 +2,112 @@
 
 import { useRef, useCallback, useEffect } from 'react'
 
-const TAGS = ['Figma deep dives', 'Career advice', 'Design critique', 'Process fix']
-const CELL = 18, GAP = 3, RADIUS = 140
+const BAYER8: number[][] = [
+  [ 0, 32,  8, 40,  2, 34, 10, 42],
+  [48, 16, 56, 24, 50, 18, 58, 26],
+  [12, 44,  4, 36, 14, 46,  6, 38],
+  [60, 28, 52, 20, 62, 30, 54, 22],
+  [ 3, 35, 11, 43,  1, 33,  9, 41],
+  [51, 19, 59, 27, 49, 17, 57, 25],
+  [15, 47,  7, 39, 13, 45,  5, 37],
+  [63, 31, 55, 23, 61, 29, 53, 21],
+]
+const B8 = 8
+const B8N = 64
 
-export default function MentorshipCard() {
-  const cardRef   = useRef<HTMLDivElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const mouseRef  = useRef<{ x: number; y: number } | null>(null)
-  const rafRef    = useRef<number>(0)
-  const activeRef = useRef(false)
-  const phasesRef = useRef<Float32Array | null>(null)
+const TAGS       = ['Figma deep dives', 'Career advice', 'Design critique', 'Process fix']
+const CELL       = 4    // dither pixel size
+const MAX_RADIUS = 180
+const IDLE_MS    = 160
+const FADE_IN    = 0.10
+const FADE_OUT   = 0.025
+
+export default function MentorshipCard({ id }: { id?: string }) {
+  const cardRef     = useRef<HTMLDivElement>(null)
+  const canvasRef   = useRef<HTMLCanvasElement>(null)
+  const mouseRef    = useRef<{ x: number; y: number } | null>(null)
+  const lastMoveRef = useRef(0)
+  const alphaRef    = useRef(0)
+  const rafRef      = useRef<number>(0)
 
   const syncCanvas = useCallback(() => {
     const canvas = canvasRef.current
     const card   = cardRef.current
     if (!canvas || !card) return
     const { width, height } = card.getBoundingClientRect()
-    if (canvas.width !== Math.round(width) || canvas.height !== Math.round(height)) {
-      canvas.width  = Math.round(width)
-      canvas.height = Math.round(height)
-      const cols   = Math.ceil(width  / (CELL + GAP)) + 1
-      const rows   = Math.ceil(height / (CELL + GAP)) + 1
-      const phases = new Float32Array(cols * rows)
-      for (let i = 0; i < phases.length; i++) phases[i] = Math.random() * Math.PI * 2
-      phasesRef.current = phases
+    const w = Math.round(width), h = Math.round(height)
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w; canvas.height = h
     }
   }, [])
 
-  const draw = useCallback((ts: number) => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    const W = canvas.width, H = canvas.height
-    const t = ts / 1000
-    const mouse  = mouseRef.current
-    const phases = phasesRef.current
-    ctx.clearRect(0, 0, W, H)
-    const cols = Math.ceil(W / (CELL + GAP)) + 1
-    const rows = Math.ceil(H / (CELL + GAP)) + 1
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        const cx = c * (CELL + GAP) + CELL / 2
-        const cy = r * (CELL + GAP) + CELL / 2
-        let proximity = 0
-        if (mouse) {
-          const dist = Math.hypot(cx - mouse.x, cy - mouse.y)
-          proximity  = Math.max(0, 1 - dist / RADIUS)
-          proximity  = proximity * proximity * proximity
-        }
-        if (proximity < 0.008) continue
-        const phase = phases ? phases[r * cols + c] : 0
-        const pulse = 0.5 + 0.5 * Math.sin(t * (1.8 + proximity * 3.5) + phase)
-        const size  = 2 + (CELL - 2) * proximity * (0.75 + pulse * 0.25)
-        const alpha = proximity * (0.22 + pulse * 0.16)
-        ctx.save()
-        ctx.translate(cx, cy)
-        ctx.globalAlpha = alpha
-        ctx.fillStyle   = '#ffffff'
-        ctx.fillRect(-size / 2, -size / 2, size, size)
-        ctx.restore()
-      }
-    }
-    rafRef.current = requestAnimationFrame(draw)
-  }, [])
-
-  const startLoop = useCallback(() => {
-    if (activeRef.current) return
-    activeRef.current = true
-    syncCanvas()
-    rafRef.current = requestAnimationFrame(draw)
-  }, [draw, syncCanvas])
-
-  const stopLoop = useCallback(() => {
-    activeRef.current = false
-    mouseRef.current  = null
-    cancelAnimationFrame(rafRef.current)
+  const draw = useCallback(() => {
     const canvas = canvasRef.current
     const ctx    = canvas?.getContext('2d')
-    if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height)
-  }, [])
+    if (!canvas || !ctx) { rafRef.current = 0; return }
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    syncCanvas()
+
+    const idle = Date.now() - lastMoveRef.current > IDLE_MS
+    alphaRef.current = idle
+      ? Math.max(0, alphaRef.current - FADE_OUT)
+      : Math.min(1, alphaRef.current + FADE_IN)
+
+    const alpha = alphaRef.current
+    const mouse = mouseRef.current
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    if (mouse && alpha > 0.004) {
+      ctx.globalAlpha = alpha
+      ctx.fillStyle   = 'rgb(218,212,202)' // soft beige on dark bg
+
+      const cols = Math.ceil(canvas.width  / CELL)
+      const rows = Math.ceil(canvas.height / CELL)
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const x    = col * CELL + CELL * 0.5
+          const y    = row * CELL + CELL * 0.5
+          const dist = Math.hypot(x - mouse.x, y - mouse.y)
+          if (dist >= MAX_RADIUS) continue
+
+          const u    = dist / MAX_RADIUS
+          const prox = 1 - u * u * (3 - 2 * u)  // smoothstep
+
+          if (prox > BAYER8[row % B8][col % B8] / B8N) {
+            ctx.fillRect(col * CELL, row * CELL, CELL - 1, CELL - 1)
+          }
+        }
+      }
+      ctx.globalAlpha = 1
+    }
+
+    if (alpha > 0 || !idle) {
+      rafRef.current = requestAnimationFrame(draw)
+    } else {
+      rafRef.current = 0
+    }
+  }, [syncCanvas])
+
+  const onMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = cardRef.current?.getBoundingClientRect()
     if (!rect) return
-    mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top }
-    if (!activeRef.current) startLoop()
-  }, [startLoop])
+    mouseRef.current    = { x: e.clientX - rect.left, y: e.clientY - rect.top }
+    lastMoveRef.current = Date.now()
+    if (!rafRef.current) rafRef.current = requestAnimationFrame(draw)
+  }, [draw])
+
+  const onLeave = useCallback(() => {
+    mouseRef.current    = null
+    lastMoveRef.current = 0
+    if (!rafRef.current) rafRef.current = requestAnimationFrame(draw)
+  }, [draw])
 
   useEffect(() => () => cancelAnimationFrame(rafRef.current), [])
 
   return (
-    <div ref={cardRef} className="b-card card-mentorship" onMouseMove={handleMouseMove} onMouseLeave={stopLoop}>
+    <div ref={cardRef} id={id} className="b-card card-mentorship" onMouseMove={onMove} onMouseLeave={onLeave}>
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }} />
 
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -111,7 +125,7 @@ export default function MentorshipCard() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1.5rem' }}>
           {TAGS.map(tag => <span key={tag} className="b-tag b-tag-dark">{tag}</span>)}
         </div>
-        <a href="#" className="b-btn b-btn-light">Book a session →</a>
+        <a href="#" className="b-btn b-btn-light">Join the waitlist →</a>
       </div>
 
       <p style={{ fontSize: '0.62rem', color: '#444', marginTop: 'auto', position: 'relative', zIndex: 1 }}>

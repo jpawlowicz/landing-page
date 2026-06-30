@@ -2,7 +2,7 @@
 
 import { useRef, useState, useCallback } from 'react'
 
-export default function FindMeCard() {
+export default function FindMeCard({ id }: { id?: string }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null)
 
@@ -13,7 +13,7 @@ export default function FindMeCard() {
   }, [])
 
   return (
-    <div ref={cardRef} className="b-card card-findme" onMouseMove={handleMouseMove} onMouseLeave={() => setPos(null)}>
+    <div ref={cardRef} id={id} className="b-card card-findme" onMouseMove={handleMouseMove} onMouseLeave={() => setPos(null)}>
       <div
         style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
@@ -28,7 +28,7 @@ export default function FindMeCard() {
       <div style={{ position: 'relative' }}>
         <h2 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#1a1a1a', marginBottom: '0.3rem' }}>Instagram</h2>
         <p style={{ fontSize: '0.7rem', color: '#555', marginBottom: '0.85rem' }}>Design tips, Figma, AI workflow</p>
-        <a href="https://instagram.com/joannawrobel_ux" target="_blank" rel="noopener noreferrer" className="b-btn b-btn-pink">
+        <a href="https://instagram.com/joannawrobel_ux" target="_blank" rel="noopener noreferrer" className="b-btn b-btn-black">
           → @joannawrobel_ux
         </a>
       </div>
