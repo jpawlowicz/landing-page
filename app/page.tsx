@@ -21,7 +21,7 @@ export default function Home() {
 
           <div id="s-hero" className="b-card card-hero" style={{ paddingRight: '152px' }}>
             <div>
-              <div className="b-label">UX Designer</div>
+              <div className="b-label">UX Designer & Mentor</div>
               <h1 style={{
                 fontSize: 'clamp(2rem, 3.8vw, 2.75rem)',
                 fontWeight: 800,
@@ -36,7 +36,7 @@ export default function Home() {
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
               <Tag>Available for work</Tag>
-              <Tag>Warsaw / Remote</Tag>
+              <Tag>Gdansk / Remote</Tag>
             </div>
             <div style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)' }}>
               <HeroCircle />

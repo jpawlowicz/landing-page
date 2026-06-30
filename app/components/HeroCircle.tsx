@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react'
 
-const CIRCLE_TEXT = 'available · UX Design · AI Products · available · UX Design · AI Products · '
+const CIRCLE_TEXT = '· Building this site with Claude Code and Figma AI! · '
 
 export default function HeroCircle() {
   const [hovered, setHovered] = useState(false)
   const [isTouch, setIsTouch] = useState(false)
   const r = 52
-  const DOT_EXPAND = 64
+  const DOT_EXPAND = 88
 
   useEffect(() => {
     setIsTouch(window.matchMedia('(hover: none)').matches)
@@ -47,9 +47,8 @@ export default function HeroCircle() {
         transition: 'width 0.5s cubic-bezier(0.34,1.4,0.64,1), height 0.5s cubic-bezier(0.34,1.4,0.64,1)',
         cursor: expanded ? 'default' : 'pointer',
       }}>
-        {/* Drop your photo in /public and set src="/photo.jpg" */}
         <img
-          src=""
+          src="/photo.png"
           alt="Joanna Wrobel"
           style={{
             width: '100%', height: '100%',

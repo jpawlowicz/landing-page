@@ -128,7 +128,7 @@
 .card-gumroad:hover { background: #FAF3D0; }
 .card-gumroad:hover .b-btn { background: #E7CA24; border-color: #E7CA24; color: #1a1a1a; }
 .card-linkedin { transition: background 0.2s ease; }
-.card-linkedin:hover { background: #D8FFFF; }
+.card-linkedin:hover { background: #D8FFFF; cursor: url('/cursor-heart.svg') 8 8, pointer; }
 .card-linkedin:hover h2,
 .card-linkedin:hover p,
 .card-linkedin:hover .b-label { color: #1e3a8a; }
