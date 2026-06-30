@@ -146,17 +146,97 @@
 }
 .nl-inner > *:first-child { flex: 1; min-width: 0; }
 
-/* ── Newsletter form ── */
-.nl-form { display: flex; gap: 0; flex-shrink: 0; }
-.nl-input {
-  border: 1.5px solid #666; border-right: none;
-  padding: 5px 14px; font-size: 0.72rem; font-weight: 500;
-  font-family: var(--font-space-grotesk), sans-serif;
-  background: transparent; color: #1a1a1a; outline: none;
-  width: 220px; border-radius: 2px 0 0 2px;
+/* ── MailerLite embed overrides ──────────────────────────────────────────────
+   Using #mlb2-43216390[id] as the root: the [id] attribute selector adds one
+   extra specificity unit (0,1,0) above MailerLite's own ID-based rules, so
+   our !important declarations win even though ML injects its <style> later.
+   ────────────────────────────────────────────────────────────────────────── */
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
 }
-.nl-input::placeholder { color: #aaa; }
-.nl-submit { border-radius: 0 2px 2px 0; }
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody,
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody {
+  padding: 0 !important;
+}
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-formContent {
+  margin: 0 0 8px 0 !important;
+}
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedContent,
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody .ml-form-successContent {
+  margin: 0 0 8px 0 !important;
+}
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit {
+  margin: 0 !important;
+}
+/* Input */
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input {
+  background-color: #1a1a1a !important;
+  color: #e8e2d9 !important;
+  border-color: #555 !important;
+  border-radius: 2px !important;
+  border-width: 1.5px !important;
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  padding: 6px 12px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input::-webkit-input-placeholder { color: #888 !important; }
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-fieldRow input::placeholder { color: #888 !important; }
+/* Labels */
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-block-form .ml-field-group label {
+  color: #e8e2d9 !important;
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif !important;
+  font-size: 0.72rem !important;
+}
+/* Hide interest group checkbox — value still submits via the hidden input */
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-interestGroupsRow {
+  display: none !important;
+}
+/* Submit button */
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.primary {
+  background-color: #e8e2d9 !important;
+  border: 1.5px solid #e8e2d9 !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+  color: #1a1a1a !important;
+  cursor: pointer !important;
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+  padding: 6px 13px !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  transition: background-color 0.15s, border-color 0.15s !important;
+}
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.primary:hover {
+  background-color: #39ff14 !important;
+  border-color: #39ff14 !important;
+  color: #1a1a1a !important;
+}
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.loading {
+  display: none !important;
+}
+/* Success message */
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody .ml-form-successContent h4 {
+  color: #e8e2d9 !important;
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif !important;
+  font-size: 0.9rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.3rem !important;
+}
+#mlb2-43216390[id].ml-form-embedContainer .ml-form-embedWrapper .ml-form-successBody .ml-form-successContent p {
+  color: #e8e2d9 !important;
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif !important;
+  font-size: 0.72rem !important;
+  margin: 0 !important;
+}
+
 
 /* ── Tablet 701–1024px ── */
 @media (min-width: 701px) and (max-width: 1024px) {
@@ -191,9 +271,6 @@
   .card-newsletter  { grid-column: 1 / span 2; grid-row: 7; }
   .nl-inner { flex-direction: column; align-items: stretch; }
   .nl-inner > * { width: 100%; }
-  .nl-form { flex-direction: column; width: 100%; }
-  .nl-input { width: 100%; border: 1.5px solid #666; border-bottom: none; border-radius: 2px 2px 0 0; }
-  .nl-submit { border: 1.5px solid #666; border-radius: 0 0 2px 2px; width: 100%; justify-content: center; align-self: stretch; }
 }
 
 /* ── Mobile wheel nav ── */

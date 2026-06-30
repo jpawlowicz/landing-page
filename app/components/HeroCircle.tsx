@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-const CIRCLE_TEXT = '· Building this site with Claude Code and Figma AI! · '
+const CIRCLE_TEXT = ' Building this site with Claude Code and Figma AI · '
 
 export default function HeroCircle() {
   const [hovered, setHovered] = useState(false)

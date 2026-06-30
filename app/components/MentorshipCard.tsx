@@ -111,7 +111,7 @@ export default function MentorshipCard({ id }: { id?: string }) {
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }} />
 
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div className="b-label" style={{ color: '#555' }}>Primary Offer</div>
+        <div className="b-label" style={{ color: '#555' }}>Coming soon!</div>
         <span className="b-arrow">↗</span>
       </div>
 
@@ -125,7 +125,7 @@ export default function MentorshipCard({ id }: { id?: string }) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1.5rem' }}>
           {TAGS.map(tag => <span key={tag} className="b-tag b-tag-dark">{tag}</span>)}
         </div>
-        <a href="#" className="b-btn b-btn-light">Join the waitlist →</a>
+        <div className="ml-embedded" data-form="qVGsKe" />
       </div>
 
       <p style={{ fontSize: '0.62rem', color: '#444', marginTop: 'auto', position: 'relative', zIndex: 1 }}>
