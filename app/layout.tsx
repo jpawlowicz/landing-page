@@ -35,6 +35,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${spaceMono.variable} ${syne.variable} ${spaceGrotesk.variable}`}>
       <body className="bg-paper">{children}</body>
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-SBMP3B3VT1" strategy="afterInteractive" />
+      <Script id="google-analytics" strategy="afterInteractive">{`
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-SBMP3B3VT1');
+      `}</Script>
       <Script id="mailerlite-universal" strategy="afterInteractive">{`
         (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
         .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
