@@ -122,9 +122,21 @@ export default function Home() {
           </div>
 
         </div>
-        <div style={{ textAlign: 'center', padding: '0.4rem 0 1.2rem' }}>
-          <VisitorCount />
-        </div>
+      </div>
+
+      <div style={{
+        position: 'fixed',
+        bottom: '1.5rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 200,
+        pointerEvents: 'none',
+        background: 'rgba(232,226,217,0.75)',
+        backdropFilter: 'blur(4px)',
+        padding: '3px 8px',
+        borderRadius: '99px',
+      }}>
+        <VisitorCount />
       </div>
 
       <MobileSideNav />

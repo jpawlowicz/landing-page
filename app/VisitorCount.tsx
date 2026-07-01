@@ -17,9 +17,10 @@ export default function VisitorCount() {
   return (
     <span style={{
       fontFamily: 'var(--font-space-mono)',
-      fontSize: '0.6rem',
-      color: '#888',
+      fontSize: '0.65rem',
+      color: '#555',
       letterSpacing: '0.08em',
+      whiteSpace: 'nowrap',
     }}>
       visitors: {display}
     </span>

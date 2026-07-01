@@ -2,13 +2,7 @@ import { NextResponse } from 'next/server'
 import { readFileSync, writeFileSync, mkdirSync } from 'fs'
 import { join } from 'path'
 
-async function getRedis() {
-  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return null
-  const { Redis } = await import('@upstash/redis')
-  return new Redis({ url: process.env.KV_REST_API_URL, token: process.env.KV_REST_API_TOKEN })
-}
-
-// Local filesystem fallback (dev only)
+// Local filesystem fallback (dev only — /tmp resets on Vercel cold starts)
 const DIR  = join(process.cwd(), 'data')
 const FILE = join(DIR, 'visitors.json')
 
@@ -25,19 +19,29 @@ function incrementLocal(): number {
 }
 
 export async function GET() {
-  const redis = await getRedis()
-  if (redis) {
+  try {
+    const { Redis } = await import('@upstash/redis')
+    const redis = new Redis({
+      url:   process.env.KV_REST_API_URL!,
+      token: process.env.KV_REST_API_TOKEN!,
+    })
     const count = (await redis.get<number>('visitor_count')) ?? 0
     return NextResponse.json({ count })
+  } catch {
+    return NextResponse.json({ count: readLocal() })
   }
-  return NextResponse.json({ count: readLocal() })
 }
 
 export async function POST() {
-  const redis = await getRedis()
-  if (redis) {
+  try {
+    const { Redis } = await import('@upstash/redis')
+    const redis = new Redis({
+      url:   process.env.KV_REST_API_URL!,
+      token: process.env.KV_REST_API_TOKEN!,
+    })
     const count = await redis.incr('visitor_count')
     return NextResponse.json({ count })
+  } catch {
+    return NextResponse.json({ count: incrementLocal() })
   }
-  return NextResponse.json({ count: incrementLocal() })
 }
