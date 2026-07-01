@@ -12,6 +12,16 @@ export default function VisitorCount() {
       .catch(() => {})
   }, [])
 
-  if (count === null) return <span>visitors: —</span>
-  return <span>visitors: {String(count).padStart(3, '0')}</span>
+  const display = count === null ? '——————' : String(count).padStart(6, '0')
+
+  return (
+    <span style={{
+      fontFamily: 'var(--font-space-mono)',
+      fontSize: '0.6rem',
+      color: '#888',
+      letterSpacing: '0.08em',
+    }}>
+      visitors: {display}
+    </span>
+  )
 }

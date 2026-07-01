@@ -5,6 +5,7 @@ import BackgroundCanvas from './components/BackgroundCanvas'
 import MobileSideNav   from './components/MobileSideNav'
 import NewsletterForm  from './components/NewsletterForm'
 import ClientAnalytics from './components/ClientAnalytics'
+import VisitorCount    from './VisitorCount'
 
 function Tag({ children }: { children: React.ReactNode }) {
   return <span className="b-tag">{children}</span>
@@ -120,6 +121,9 @@ export default function Home() {
             </div>
           </div>
 
+        </div>
+        <div style={{ textAlign: 'center', padding: '0.4rem 0 1.2rem' }}>
+          <VisitorCount />
         </div>
       </div>
 

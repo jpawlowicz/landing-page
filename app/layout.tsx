@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Space_Mono, Syne, Space_Grotesk } from 'next/font/google'
 import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const SITE_URL = 'https://joannawrobel.com'
@@ -223,12 +224,13 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-paper">{children}</body>
+      <Analytics />
       <Script src="https://www.googletagmanager.com/gtag/js?id=G-SBMP3B3VT1" strategy="afterInteractive" />
       <Script id="google-analytics" strategy="afterInteractive">{`
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-SBMP3B3VT1');
+        window.gtag = function(){window.dataLayer.push(arguments);}
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-SBMP3B3VT1');
       `}</Script>
       <Script id="mailerlite-universal" strategy="afterInteractive">{`
         (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
