@@ -35,18 +35,21 @@ export default function HeroCircle() {
         </text>
       </svg>
 
-      <div style={{
-        position: 'absolute',
-        top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: expanded ? DOT_EXPAND : 10,
-        height: expanded ? DOT_EXPAND : 10,
-        borderRadius: '50%',
-        background: '#22c55e',
-        overflow: 'hidden',
-        transition: 'width 0.5s cubic-bezier(0.34,1.4,0.64,1), height 0.5s cubic-bezier(0.34,1.4,0.64,1)',
-        cursor: expanded ? 'default' : 'pointer',
-      }}>
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: expanded ? DOT_EXPAND : 10,
+          height: expanded ? DOT_EXPAND : 10,
+          borderRadius: '50%',
+          background: '#22c55e',
+          overflow: 'hidden',
+          transition: 'width 0.5s cubic-bezier(0.34,1.4,0.64,1), height 0.5s cubic-bezier(0.34,1.4,0.64,1)',
+          cursor: expanded ? 'default' : 'pointer',
+        }}
+        onClick={() => window.gtag?.('event', 'click_hero_photo')}
+      >
         <img
           src="/photo.png"
           alt="Joanna Wrobel"

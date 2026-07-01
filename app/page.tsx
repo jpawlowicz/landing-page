@@ -4,6 +4,7 @@ import HeroCircle      from './components/HeroCircle'
 import BackgroundCanvas from './components/BackgroundCanvas'
 import MobileSideNav   from './components/MobileSideNav'
 import NewsletterForm  from './components/NewsletterForm'
+import ClientAnalytics from './components/ClientAnalytics'
 
 function Tag({ children }: { children: React.ReactNode }) {
   return <span className="b-tag">{children}</span>
@@ -123,6 +124,7 @@ export default function Home() {
       </div>
 
       <MobileSideNav />
+      <ClientAnalytics />
     </>
   )
 }
